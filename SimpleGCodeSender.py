@@ -42,18 +42,21 @@ s.flushInput()  # Flush startup text in serial input
 print('Sending gcode')
  
 # Stream g-code
+lineCount = 0
+
 for line in f:
-	l = removeComment(line)
-	l = l.strip() # Strip all EOL characters for streaming
-	if  (l.isspace()==False and len(l)>0) :
-		print( 'Sending: ' + l)
-		toSend = l + '\n'
-		toSend = toSend.encode('utf_8')
-		s.write(toSend) # Send g-code block
-		grbl_out = s.read_until(b'ok\n')
-		#grbl_out = s.readline() # Wait for response with carriage return
-		grbl_out_str = grbl_out.decode('utf_8')
-		print (time.time(),' : ' + grbl_out_str.strip())
+    lineCount += 1
+    l = removeComment(line)
+    l = l.strip() # Strip all EOL characters for streaming
+    if  (l.isspace()==False and len(l)>0) :
+        print( 'Sending: ' + l)
+        toSend = l + '\n'
+        toSend = toSend.encode('utf_8')
+        s.write(toSend) # Send g-code block
+        grbl_out = s.read_until(b'ok\n')
+        #grbl_out = s.readline() # Wait for response with carriage return
+        grbl_out_str = grbl_out.decode('utf_8')
+        print (lineCount, time.time(),' : ' + grbl_out_str.strip())
  
 # Wait here until printing is finished to close serial port and file.
 # raw_input("  Press <Enter> to exit.")
