@@ -28,6 +28,10 @@ print( 'Opening Serial Port')
  
 # Open g-code file
 #f = open('/media/UNTITLED/shoulder.g','r');
+
+num_lines = sum(1 for _ in open(args.file))
+
+
 f = open(args.file,'r');
 print ('Opening gcode file')
  
@@ -44,6 +48,8 @@ print('Sending gcode')
 # Stream g-code
 lineCount = 0
 
+startTime = time.time()
+
 for line in f:
     lineCount += 1
     l = removeComment(line)
@@ -56,8 +62,15 @@ for line in f:
         grbl_out = s.read_until(b'ok\n')
         #grbl_out = s.readline() # Wait for response with carriage return
         grbl_out_str = grbl_out.decode('utf_8')
-        print (lineCount, time.time(),' : ' + grbl_out_str.strip())
- 
+        percentFinished = (lineCount/num_lines)*100
+        timeNow = time.time()
+        elapsedTime = timeNow - startTime
+        print ("T", f'{timeNow:.1f}',
+            f'{percentFinished:.1f}%',
+            "Line",lineCount," of ", num_lines,
+            "Run Time",
+            f'{elapsedTime:.1f}s',":" + grbl_out_str.strip(),sep=",")
+
 # Wait here until printing is finished to close serial port and file.
 # raw_input("  Press <Enter> to exit.")
  
