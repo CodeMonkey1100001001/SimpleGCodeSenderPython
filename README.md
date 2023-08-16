@@ -1,6 +1,10 @@
 # SimpleGCodeSenderPython
 A simple python G-Code sender for command line. Setup for working with Marlin. I am using a polar plotter.
 
+The program waits to see "ok\n" from the marlin board before sending the
+next line.
+
+
 -----
 
 Example Usage:

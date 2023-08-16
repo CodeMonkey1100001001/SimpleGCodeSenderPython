@@ -1,4 +1,7 @@
 #!/usr/bin/python
+# tested on kubuntu 21.10
+# test on raspberry pi OS
+# modified from https://github.com/bborncr/gcodesender.py/tree/master
 import serial
 import time
 import argparse
@@ -14,7 +17,7 @@ print ("USB Port: %s" % args.port )
 print ("USB Speed: %s" % args.file )
 print ("Gcode file: %s" % args.file )
 
-
+# check for ; in line if there is no ; then send line else send the line up to the comment
 def removeComment(string):
 	if (string.find(';')==-1):
 		return string
@@ -33,7 +36,7 @@ num_lines = sum(1 for _ in open(args.file))
 
 
 f = open(args.file,'r');
-print ('Opening gcode file')
+print ('Opening g-code file')
  
 # Wake up 
 s.write(b"\r\n\r\n") # Hit enter a few times to wake the Printrbot
